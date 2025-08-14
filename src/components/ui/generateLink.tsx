@@ -18,28 +18,35 @@ import { createLink } from "@/actions/actions";
 
 const formSchema = z.object({
   url: z.string().min(1),
-  alias: z.string().min(1),
+  alias: z.string().min(1).max(20),
 });
 
 export default function LinkForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      url: "",
+      alias: "",
+    },
   });
 
-  // function onSubmit(values: z.infer<typeof formSchema>) {
-  //   try {
-  //     console.log(values);
-  //   } catch (error) {
-  //     console.error("Form submission error", error);
-  //     toast.error("Failed to submit the form. Please try again.");
-  //   }
-  // }
+  const aliasValue = form.watch("alias");
+  const preview = "https://tachyon.pages.dev/" + aliasValue;
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await createLink(values);
+      toast.success("Link Created");
+      form.reset({});
+    } catch (error) {
+      toast.error("Failed to generate link.");
+    }
+  }
 
   return (
     <Form {...form}>
       <form
-        action={createLink}
-        // onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8 max-w-3xl mx-auto py-10"
       >
         <FormField
@@ -79,7 +86,8 @@ export default function LinkForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Generate Link</Button>
+        <div className="bg-muted p-2  rounded-md">Link preview: {preview}</div>
       </form>
     </Form>
   );
