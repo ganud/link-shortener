@@ -1,10 +1,11 @@
 "use client";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -32,13 +33,17 @@ export default function LinkForm() {
   });
 
   const [preview, setPreview] = useState("");
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    setUrl(window.location.href); // full current URL
+  }, []);
 
   const aliasValue = form.watch("alias");
-  const baseLink = window.location.href;
-  const aliasPreview = `'horse' -> ${baseLink}horse`;
+  const aliasPreview = `'horse' -> ${url}horse`;
 
   function generateFullLink(alias: string) {
-    return baseLink + alias;
+    return url + alias;
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
