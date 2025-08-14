@@ -34,9 +34,11 @@ export default function LinkForm() {
   const [preview, setPreview] = useState("");
 
   const aliasValue = form.watch("alias");
+  const baseLink = window.location.href;
+  const aliasPreview = `'horse' -> ${baseLink}horse`;
 
   function generateFullLink(alias: string) {
-    return "https://tachlink.pages.dev/" + alias;
+    return baseLink + alias;
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -81,11 +83,7 @@ export default function LinkForm() {
             <FormItem>
               <FormLabel>Alias</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="'horse' -> https://tachlink.pages.dev/horse"
-                  type=""
-                  {...field}
-                />
+                <Input placeholder={aliasPreview} type="" {...field} />
               </FormControl>
               {/* <FormDescription>Alias</FormDescription> */}
               <FormMessage />
