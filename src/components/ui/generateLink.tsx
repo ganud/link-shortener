@@ -1,10 +1,11 @@
 "use client";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -32,11 +33,17 @@ export default function LinkForm() {
   });
 
   const [preview, setPreview] = useState("");
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    setUrl(window.location.href); // full current URL
+  }, []);
 
   const aliasValue = form.watch("alias");
+  const aliasPreview = `'horse' -> ${url}horse`;
 
   function generateFullLink(alias: string) {
-    return "https://tachlink.pages.dev/" + alias;
+    return url + alias;
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -81,11 +88,7 @@ export default function LinkForm() {
             <FormItem>
               <FormLabel>Alias</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="'horse' -> https://tachlink.pages.dev/horse"
-                  type=""
-                  {...field}
-                />
+                <Input placeholder={aliasPreview} type="" {...field} />
               </FormControl>
               {/* <FormDescription>Alias</FormDescription> */}
               <FormMessage />

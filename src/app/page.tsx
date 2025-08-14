@@ -1,6 +1,7 @@
 import Image from "next/image";
 import LinkForm from "@/components/ui/generateLink";
 import FooterSimple from "@/components/ui/footer";
+
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col p-1.5 px-4">
