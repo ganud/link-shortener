@@ -1,6 +1,7 @@
-import { PrismaClient } from "../generated/prisma";
-const prisma = new PrismaClient();
+import { PrismaClient } from "../generated/prisma/edge";
+import { withAccelerate } from "@prisma/extension-accelerate";
 
+const prisma = new PrismaClient().$extends(withAccelerate());
 export async function generateLink(alias: string, url: string) {
   return await prisma.link.create({
     data: {
