@@ -64,7 +64,7 @@ export default function LinkForm() {
               <FormLabel>URL</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                  placeholder="https://www.youtube.com/watch?v=ydd-Sz4iMjM"
                   type=""
                   {...field}
                 />
