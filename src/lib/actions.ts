@@ -43,3 +43,11 @@ export async function signInServer(values: {
     },
   });
 }
+
+export async function fetchUserLinks(id: string) {
+  return await prisma.link.findMany({
+    where: {
+      userId: id,
+    },
+  });
+}

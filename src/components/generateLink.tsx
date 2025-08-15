@@ -16,13 +16,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createLink } from "@/lib/actions";
+import { Session } from "next-auth";
+import { updateLinkWithUser } from "@/lib/queries";
 
 const formSchema = z.object({
   url: z.string().min(1),
   alias: z.string().min(1).max(20),
 });
 
-export default function LinkForm() {
+export default function LinkForm({ session }: { session: Session }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,6 +51,9 @@ export default function LinkForm() {
     // Add the aliased link to the db from the form.
     try {
       await createLink(values);
+      if (session) {
+        await updateLinkWithUser(values.alias, session.user.id);
+      }
       setPreview(generateFullLink(aliasValue));
       toast.success("Link Created");
       form.reset({});

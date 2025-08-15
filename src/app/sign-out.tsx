@@ -1,7 +1,8 @@
 import { signOut } from "@/lib/auth";
+import { Session } from "next-auth";
 import Link from "next/link";
 
-export function SignOut({ session }: any) {
+export function SignOut({ session }: { session: Session }) {
   return (
     <form
       action={async () => {

@@ -19,3 +19,15 @@ export async function findLink(alias: string) {
   });
   return link?.url;
 }
+
+export async function updateLinkWithUser(alias: string, userId: string) {
+  const updatedLink = await prisma.link.update({
+    where: {
+      alias: alias, // Unique identifier for the user
+    },
+    data: {
+      userId: userId,
+    },
+  });
+  return updatedLink;
+}
