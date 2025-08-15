@@ -1,13 +1,13 @@
 // auth.ts
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import db from "./prisma";
+import prisma from "./prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { loginFormSchema } from "./validation-schemas";
 import { v4 as uuid } from "uuid";
-const adapter = PrismaAdapter(db);
+const adapter = PrismaAdapter(prisma);
 import { encode } from "next-auth/jwt";
-export const { auth, handlers, signIn } = NextAuth({
+export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter,
   providers: [
     Credentials({
@@ -17,12 +17,10 @@ export const { auth, handlers, signIn } = NextAuth({
         password: {},
       },
       // Authorize checks validity and returns user object if valid
-      // For some reason, replacing email with username throws a type error.
-      // Only the fields that credentials support (email, password, name, image), will return
       authorize: async (credentials) => {
         const validatedCredentials = await loginFormSchema.parse(credentials);
 
-        const user = await db.user.findFirst({
+        const user = await prisma.user.findFirst({
           where: {
             username: validatedCredentials.username,
             password: validatedCredentials.password,

@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { loginFormSchema } from "@/lib/validation-schemas";
+import { signInServer } from "@/lib/actions";
 
 const formSchema = loginFormSchema;
 
@@ -38,18 +39,9 @@ export default function LoginPreview() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      // Assuming an async login function
-      console.log(values);
-      // Pass into sign in
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
-    } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
+    const res = await signInServer(values);
+    if (!res.success) {
+      toast.error("Login failed.");
     }
   }
 
@@ -116,7 +108,7 @@ export default function LoginPreview() {
           </Form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="#" className="underline">
+            <Link href="/sign-up" className="underline">
               Sign up
             </Link>
           </div>

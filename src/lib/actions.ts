@@ -2,8 +2,8 @@
 import prisma from "./prisma";
 import { generateLink } from "./queries";
 import { executeAction } from "./executeAction";
-
 import { registerFormSchema } from "./validation-schemas";
+import { signIn } from "./auth";
 // Server action to create new link from alias.
 // This reads the formData.
 export async function createLink(values: { url: string; alias: string }) {
@@ -28,3 +28,18 @@ export const signUp = async (values: {
     },
   });
 };
+
+// Server action to sign in a user.
+export async function signInServer(values: {
+  username: string;
+  password: string;
+}) {
+  // You can add logging, validation, etc. here
+  return executeAction({
+    actionFn: async () => {
+      return await signIn("credentials", {
+        ...values,
+      });
+    },
+  });
+}

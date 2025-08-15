@@ -72,7 +72,7 @@ export default function RegisterPreview() {
                       <FormControl>
                         <Input
                           id="username"
-                          placeholder="johndoe@mail.com"
+                          placeholder="guineapig23"
                           type="text"
                           {...field}
                         />
