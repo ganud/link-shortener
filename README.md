@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<a><p style="text-align: center;" href="https://tachlink.vercel.app/">View Demo</p></a>
+![Site Preview](https://i.imgur.com/EAuzXYu.png)
 
-## Getting Started
+# About
 
-First, run the development server:
+This is a custom link "shortener" I made to learn more about NextJS's server related features and potential workflow ideas for building sites quicker.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+All it does is wrap a link in a cute alias, it's not particularly deep.
+
+## Setup
+
+1. Set DIRECT_DATABASE_URL and DATABASE_URL environment variables. DATABASE_URL uses a postgres connection URI, and DIRECT_DATABASE_URL uses a prisma accelerate API Key for hosting on vercel/cloudflare.
+2. Install npm packages
+
+```
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Initialize database schema
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+npx prisma generate
+npx prisma migrate deploy
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run locally
 
-## Learn More
+```
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Other ideas + Reflection
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+I wanted to do a simple username-password login system on a session store so individual users can save their own links, but major auth libraries seem to condemn this method. BetterAuth forces an email to be provided, and I couldn't make sense of the Auth.js docs, nor does it have an up to date alternative resource I can look at.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+I'll probably try some form of auth as its own isolated nextjs project and try re-implementing it here once I have more experience.
