@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { signUp } from "@/lib/actions";
 
 import {
   Form,
@@ -24,46 +25,44 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import { loginFormSchema } from "@/lib/validation-schemas";
 
-const formSchema = loginFormSchema;
+import { registerFormSchema } from "@/lib/validation-schemas";
+import { redirect } from "next/navigation";
 
-export default function LoginPreview() {
+const formSchema = registerFormSchema;
+
+export default function RegisterPreview() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      // Assuming an async login function
-      console.log(values);
-      // Pass into sign in
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
-    } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
+    const res = await signUp(values);
+    if (res.success) {
+      redirect("/login");
     }
+    toast.error("Registration failed.");
   }
 
   return (
-    <div className=" flex-col min-h-[50vh] h-full w-full items-center justify-center px-4">
+    <div className="min-h-[60vh] h-full w-full items-center justify-center px-4">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Login to view your saved links.</CardDescription>
+          <CardTitle className="text-2xl">Register</CardTitle>
+          <CardDescription>
+            Create a new account by filling out the form below.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="grid gap-4">
+                {/* Email Field */}
                 <FormField
                   control={form.control}
                   name="username"
@@ -73,7 +72,7 @@ export default function LoginPreview() {
                       <FormControl>
                         <Input
                           id="username"
-                          placeholder="guineapig23"
+                          placeholder="johndoe@mail.com"
                           type="text"
                           {...field}
                         />
@@ -82,25 +81,19 @@ export default function LoginPreview() {
                     </FormItem>
                   )}
                 />
+
+                {/* Password Field */}
                 <FormField
                   control={form.control}
                   name="password"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <div className="flex justify-between items-center">
-                        <FormLabel htmlFor="password">Password</FormLabel>
-                        <Link
-                          href="#"
-                          className="ml-auto inline-block text-sm underline"
-                        >
-                          Forgot your password?
-                        </Link>
-                      </div>
+                      <FormLabel htmlFor="password">Password</FormLabel>
                       <FormControl>
                         <PasswordInput
                           id="password"
                           placeholder="******"
-                          autoComplete="current-password"
+                          autoComplete="new-password"
                           {...field}
                         />
                       </FormControl>
@@ -108,16 +101,39 @@ export default function LoginPreview() {
                     </FormItem>
                   )}
                 />
+
+                {/* Confirm Password Field */}
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="confirmPassword">
+                        Confirm Password
+                      </FormLabel>
+                      <FormControl>
+                        <PasswordInput
+                          id="confirmPassword"
+                          placeholder="******"
+                          autoComplete="new-password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <Button type="submit" className="w-full">
-                  Login
+                  Register
                 </Button>
               </div>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="#" className="underline">
-              Sign up
+            Already have an account?{" "}
+            <Link href="/login" className="underline">
+              Login
             </Link>
           </div>
         </CardContent>
