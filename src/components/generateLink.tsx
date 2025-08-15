@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -16,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createLink } from "@/actions/actions";
+import { createLink } from "@/lib/actions";
 
 const formSchema = z.object({
   url: z.string().min(1),
@@ -36,7 +35,7 @@ export default function LinkForm() {
   const [url, setUrl] = useState("");
 
   useEffect(() => {
-    setUrl(window.location.href); // full current URL
+    setUrl(window.location.href); // full current URL  of the homepage
   }, []);
 
   const aliasValue = form.watch("alias");
@@ -47,6 +46,7 @@ export default function LinkForm() {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    // Add the aliased link to the db from the form.
     try {
       await createLink(values);
       setPreview(generateFullLink(aliasValue));
@@ -96,6 +96,7 @@ export default function LinkForm() {
           )}
         />
         <Button type="submit">Generate Link</Button>
+        {/* Only show a link preview if a link was successfully generated. */}
         {preview && (
           <div className="bg-muted p-2 rounded-md flex justify-between">
             <p>{preview}</p>

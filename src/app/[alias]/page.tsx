@@ -1,4 +1,4 @@
-import { findLink } from "../../../prisma/queries";
+import { findLink } from "../../lib/queries";
 import { redirect } from "next/navigation";
 
 export default async function Page({

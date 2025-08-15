@@ -1,5 +1,5 @@
 import Image from "next/image";
-import LinkForm from "@/components/ui/generateLink";
+import LinkForm from "@/components/generateLink";
 import FooterSimple from "@/components/ui/footer";
 
 export default function Home() {
