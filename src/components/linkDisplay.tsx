@@ -1,3 +1,4 @@
+"use client";
 import {
   Table,
   TableBody,
@@ -9,8 +10,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Link } from "../../generated/prisma";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export function Links({ links }: { links: Link[] }) {
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    setUrl(window.location.href.slice(0, -6)); // root url of this page
+  }, []);
+
   return (
     <Table>
       <TableCaption>View your recent links.</TableCaption>
@@ -23,9 +31,17 @@ export function Links({ links }: { links: Link[] }) {
       </TableHeader>
       <TableBody>
         {links.map((link) => (
-          <TableRow key={link.id}>
+          <TableRow
+            key={link.id}
+            onClick={() => {
+              navigator.clipboard.writeText(`${url}/${link.alias}`);
+              toast.success(`Copied ${url}/${link.alias} to clipboard.`);
+            }}
+          >
             <TableCell className="font-medium">{link.url}</TableCell>
-            <TableCell>{link.alias}</TableCell>
+            <TableCell>
+              {url}/{link.alias}
+            </TableCell>
             <TableCell>
               {link.createdAt.toLocaleDateString()}{" "}
               {link.createdAt.toLocaleTimeString()}

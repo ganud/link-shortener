@@ -49,5 +49,8 @@ export async function fetchUserLinks(id: string) {
     where: {
       userId: id,
     },
+    orderBy: {
+      createdAt: "desc", // most recent first
+    },
   });
 }

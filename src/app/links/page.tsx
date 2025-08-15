@@ -1,5 +1,4 @@
 import FooterSimple from "@/components/ui/footer";
-import LoginPreview from "@/components/loginForm";
 import { auth } from "@/lib/auth";
 import { Links } from "@/components/linkDisplay";
 import { fetchUserLinks } from "@/lib/actions";
