@@ -13,7 +13,7 @@ export default async function Home() {
       <h1 className="text-center text-4xl font-bold">Tachylink Shortener</h1>
       <SignOut session={session!}></SignOut>
       <Link href={"/links"}>
-        <p className="text-center underline hover:text-blue-500">View links.</p>
+        <p className="text-center underline hover:text-blue-500">View links</p>
       </Link>
       <div className="">
         <LinkForm session={session!}></LinkForm>

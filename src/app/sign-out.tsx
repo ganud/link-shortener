@@ -16,7 +16,7 @@ export function SignOut({ session }: { session: Session }) {
           Logged in as{" "}
           <button
             type="submit"
-            className="hover:text-blue-500  hover:underline"
+            className="hover:text-blue-500 hover:underline font-bold"
           >
             {session.user?.username}
           </button>
