@@ -2,6 +2,7 @@
 import prisma from "./prisma";
 import { generateLink } from "./queries";
 import { executeAction } from "./executeAction";
+import bcrypt from "bcryptjs";
 import { registerFormSchema } from "./validation-schemas";
 import { signIn } from "./auth";
 // Server action to create new link from alias.
@@ -18,11 +19,11 @@ export const signUp = async (values: {
   return executeAction({
     actionFn: async () => {
       const username = values.username;
-      const password = values.password;
+      const hashedPassword = await bcrypt.hash(values.password, 10);
       await prisma.user.create({
         data: {
           username: username,
-          password: password,
+          password: hashedPassword,
         },
       });
     },
