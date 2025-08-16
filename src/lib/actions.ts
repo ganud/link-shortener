@@ -15,14 +15,22 @@ export async function createLink(values: { url: string; alias: string }) {
 export const signUp = async (values: {
   username: string;
   password: string;
+  confirmPassword: string;
 }) => {
   return executeAction({
     actionFn: async () => {
       const username = values.username;
-      const hashedPassword = await bcrypt.hash(values.password, 10);
+      const password = values.password;
+      const confirmPassword = values.confirmPassword;
+      const validateData = registerFormSchema.parse({
+        username,
+        password,
+        confirmPassword,
+      });
+      const hashedPassword = await bcrypt.hash(validateData.password, 10);
       await prisma.user.create({
         data: {
-          username: username,
+          username: validateData.username,
           password: hashedPassword,
         },
       });

@@ -124,7 +124,11 @@ export default function RegisterPreview() {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}
+                >
                   Register
                 </Button>
               </div>

@@ -1,4 +1,5 @@
 "use server";
+import { revalidatePath } from "next/cache";
 import prisma from "./prisma";
 
 export async function generateLink(alias: string, url: string) {
@@ -23,11 +24,21 @@ export async function findLink(alias: string) {
 export async function updateLinkWithUser(alias: string, userId: string) {
   const updatedLink = await prisma.link.update({
     where: {
-      alias: alias, // Unique identifier for the user
+      alias: alias,
     },
     data: {
       userId: userId,
     },
   });
   return updatedLink;
+}
+
+export async function deleteLink(alias: string) {
+  const link = await prisma.link.delete({
+    where: {
+      alias: alias,
+    },
+  });
+  revalidatePath("/links");
+  return link;
 }

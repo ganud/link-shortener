@@ -32,7 +32,6 @@ export default function LinkForm({ session }: { session: Session }) {
       alias: "",
     },
   });
-
   const [preview, setPreview] = useState("");
   const [url, setUrl] = useState("");
 
@@ -100,7 +99,9 @@ export default function LinkForm({ session }: { session: Session }) {
             </FormItem>
           )}
         />
-        <Button type="submit">Generate Link</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          Generate Link
+        </Button>
         {/* Only show a link preview if a link was successfully generated. */}
         {preview && (
           <div className="bg-muted p-2 rounded-md flex justify-between">
